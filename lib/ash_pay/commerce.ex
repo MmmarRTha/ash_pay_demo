@@ -11,6 +11,8 @@ defmodule AshPay.Commerce do
 
     resource AshPay.Commerce.Order do
       define :purchase_product, action: :purchase_product
+      define :list_order, action: :read
+      define :refund_order, action: :refund
     end
   end
 end
