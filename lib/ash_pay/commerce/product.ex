@@ -40,4 +40,8 @@ defmodule AshPay.Commerce.Product do
     create_timestamp :inserted_at
     update_timestamp :updated_at
   end
+
+  relationships do
+    has_many :orders, AshPay.Commerce.Order
+  end
 end
