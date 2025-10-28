@@ -65,7 +65,7 @@ config :spark,
 config :ash_pay,
   ecto_repos: [AshPay.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [AshPay.Accounts]
+  ash_domains: [AshPay.Commerce, AshPay.Accounts]
 
 # Configures the endpoint
 config :ash_pay, AshPayWeb.Endpoint,
