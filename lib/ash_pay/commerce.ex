@@ -8,5 +8,9 @@ defmodule AshPay.Commerce do
       define :list_products, action: :read
       define :get_product, action: :read, get_by: [:id]
     end
+
+    resource AshPay.Commerce.Order do
+      define :purchase_product, action: :purchase_product
+    end
   end
 end
