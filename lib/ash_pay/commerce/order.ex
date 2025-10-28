@@ -6,11 +6,25 @@ defmodule AshPay.Commerce.Order do
     otp_app: :ash_pay,
     domain: AshPay.Commerce,
     data_layer: AshPostgres.DataLayer,
-    authorizers: [Ash.Policy.Authorizer]
+    authorizers: [Ash.Policy.Authorizer],
+    extensions: [AshOban]
 
   postgres do
     table "orders"
     repo AshPay.Repo
+  end
+
+  oban do
+    triggers do
+      trigger :process_payment do
+        action :process_payment
+        queue :default
+        scheduler_cron false
+        worker_module_name AshPay.Commerce.Order.AshOban.Worker.ProcessPayment
+        scheduler_module_name AshPay.Commerce.Order.AshOban.Scheduler.ProcessPayment
+        where expr(state == :created)
+      end
+    end
   end
 
   actions do
@@ -28,10 +42,36 @@ defmodule AshPay.Commerce.Order do
 
                Ash.Changeset.force_change_attribute(changeset, :amount, product.price)
              end)
+
+      change run_oban_trigger(:process_payment)
+    end
+
+    update :process_payment do
+      description "Process the payment for an order"
+
+      require_atomic? false
+
+      change fn changeset, _ ->
+        # Simulate a payment processing delay
+        processing_milliseconds = :rand.uniform(5_000) + 2_000
+        Process.sleep(processing_milliseconds)
+
+        if :rand.uniform() > 0.1 do
+          # Simulate a successful payment 90% of the time
+          Ash.Changeset.change_attribute(changeset, :state, :paid)
+        else
+          Ash.Changeset.change_attribute(changeset, :state, :failed)
+        end
+      end
     end
   end
 
   policies do
+    bypass AshOban.Checks.AshObanInteraction do
+      authorize_if action_type(:read)
+      authorize_if action(:process_payment)
+    end
+
     policy action_type(:read) do
       authorize_if relates_to_actor_via(:user)
     end
@@ -50,7 +90,7 @@ defmodule AshPay.Commerce.Order do
     end
 
     attribute :state, :atom do
-      constraints one_of: [:created, :paid]
+      constraints one_of: [:created, :paid, :failed]
       default :created
       allow_nil? false
       public? true
