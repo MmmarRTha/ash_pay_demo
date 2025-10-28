@@ -27,7 +27,8 @@ defmodule AshPay.Repo.Migrations.CreateOrders do
             name: "orders_user_id_fkey",
             type: :uuid,
             prefix: "public"
-          ), null: false
+          ),
+          null: false
 
       add :product_id,
           references(:products,
@@ -35,7 +36,8 @@ defmodule AshPay.Repo.Migrations.CreateOrders do
             name: "orders_product_id_fkey",
             type: :uuid,
             prefix: "public"
-          ), null: false
+          ),
+          null: false
     end
   end
 
