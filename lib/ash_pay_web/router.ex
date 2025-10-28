@@ -36,6 +36,7 @@ defmodule AshPayWeb.Router do
       #
       # If an authenticated user must *not* be present:
       # on_mount {AshPayWeb.LiveUserAuth, :live_no_user}
+      live "/storefront", StorefrontLive, :index
     end
   end
 
