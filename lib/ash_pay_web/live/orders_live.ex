@@ -5,7 +5,15 @@ defmodule AshPayWeb.OrdersLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    current_user = socket.assigns.current_user
+    is_admin = current_user.role == :admin
+
     if connected?(socket) do
+      if is_admin do
+        # Admin users subscribe to all orders
+        #
+      end
+
       user_id = socket.assigns.current_user.id
       Phoenix.PubSub.subscribe(AshPay.PubSub, "orders:#{user_id}:created")
       Phoenix.PubSub.subscribe(AshPay.PubSub, "orders:#{user_id}:updated")
