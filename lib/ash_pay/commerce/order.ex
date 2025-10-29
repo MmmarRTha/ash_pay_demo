@@ -6,7 +6,8 @@ defmodule AshPay.Commerce.Order do
     domain: AshPay.Commerce,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshOban]
+    extensions: [AshOban],
+    notifiers: [Ash.Notifier.PubSub]
 
   postgres do
     table "orders"
@@ -115,6 +116,14 @@ defmodule AshPay.Commerce.Order do
     policy action_type(:create) do
       authorize_if actor_present()
     end
+  end
+
+  pub_sub do
+    module AshPayWeb.Endpoint
+
+    prefix "orders"
+    publish :purchase_product, [[:user_id, nil], "created"]
+    publish_all :update, [[:user_id, nil], "update", [:_pkey, nil]]
   end
 
   attributes do
