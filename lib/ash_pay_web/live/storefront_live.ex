@@ -42,7 +42,7 @@ defmodule AshPayWeb.StorefrontLive do
       <div class="max-w-6xl mx-auto p-6">
         <div class="mb-8">
           <h1 class="text-3xl font-bold text-base-content mb-2">AshPay</h1>
-          <p class="text-base-content/70">What are you buying today?</p>
+          <p class="text-lg text-base-content/90">What are you buying today?</p>
         </div>
 
         <div :if={@products == []} class="text-center py-12">

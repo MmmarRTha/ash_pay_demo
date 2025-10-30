@@ -170,7 +170,7 @@ defmodule AshPayWeb.OrderDetailsLive do
   defp step_order_refund(:refunded), do: 2
 
   defp format_state_badge(:created), do: {"Processing", "badge-warning"}
-  defp format_state_badge(:paid), do: {"Paid", "badge-success"}
+  defp format_state_badge(:paid), do: {"Paid", "bg-emerald-400"}
   defp format_state_badge(:failed), do: {"Failed", "badge-error"}
   defp format_state_badge(:ready_for_refund), do: {"Refund Pending", "badge-info"}
   defp format_state_badge(:refunded), do: {"Refunded", "badge-neutral"}
@@ -221,8 +221,8 @@ defmodule AshPayWeb.OrderDetailsLive do
                   <p class="text-sm text-base-content/50">
                     Placed on {Calendar.strftime(@order.inserted_at, "%B %d, %Y at %I:%M %p")}
                   </p>
-                </div>step.de
-                <div class="text-right">
+                </div>
+                <div class="text-right font-bold text-white">
                   <% {status_text, badge_class} = format_state_badge(@order.state) %>
                   <div class={"badge " <> badge_class <> " badge-lg"}>{status_text}</div>
                 </div>
@@ -233,7 +233,7 @@ defmodule AshPayWeb.OrderDetailsLive do
                 <h3 class="font-semibold text-lg mb-2">{@order.product.name}</h3>
                 <div class="flex justify-between items-center">
                   <span class="text-base-content/70">Amount</span>
-                  <span class="font-bold text-xl text-success">
+                  <span class="font-bold text-xl text-orange-400">
                     {Money.to_string!(@order.amount)}
                   </span>
                 </div>
@@ -266,7 +266,7 @@ defmodule AshPayWeb.OrderDetailsLive do
                   <span class="font-mono">{@order.id}</span>
                 </p>
                 <p class="text-sm">
-                  <span class="font-medium">Support:</span> ashpay@example.com
+                  <span class="font-medium">Support:</span> ashpay@ashpay.com
                 </p>
               </div>
             </div>
