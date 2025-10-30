@@ -65,11 +65,9 @@ defmodule AshPay.Commerce.Order do
 
       require_atomic? false
 
-      change fn changeset, _ ->
-        # Simulate a payment processing delay
-        processing_milliseconds = :rand.uniform(5_000) + 2_000
-        Process.sleep(processing_milliseconds)
+      change AshPay.Commerce.Changes.Sleep
 
+      change fn changeset, _ ->
         if :rand.uniform() > 0.1 do
           # Simulate a successful payment 90% of the time
           Ash.Changeset.change_attribute(changeset, :state, :paid)
@@ -84,13 +82,8 @@ defmodule AshPay.Commerce.Order do
 
       require_atomic? false
 
-      change fn changeset, _ ->
-        # Simulate a refund processing delay
-        processing_milliseconds = :rand.uniform(5_000) + 2_000
-        Process.sleep(processing_milliseconds)
-
-        Ash.Changeset.change_attribute(changeset, :state, :refunded)
-      end
+      change AshPay.Commerce.Changes.Sleep
+      change set_attribute(:state, :refund)
     end
   end
 
