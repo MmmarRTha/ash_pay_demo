@@ -22,12 +22,9 @@ defmodule AshPayWeb.OrdersLive do
       end
     end
 
-    page_title = if is_admin, do: "All Orders", else: "My Orders"
-
     {:ok,
      socket
-     |> assign(:page_title, page_title)
-     |> assign(:is_admin, is_admin)
+     |> assign(:page_title, "Orders")
      |> stream(:orders, [])}
   end
 
@@ -95,41 +92,19 @@ defmodule AshPayWeb.OrdersLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_user={@current_user}>
       <div class="max-w-7xl mx-auto p-6">
-        <div :if={@is_admin} class="mb-6">
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div class="flex items-center">
-              <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fill-rule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clip-rule="evenodd"
-                >
-                </path>
-              </svg>
-              <p class="text-blue-800 font-medium">
-                Admin View: You are viewing orders from all users
-              </p>
-            </div>
-          </div>
-        </div>
-
         <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">
-            {if @is_admin, do: "All Orders", else: "My Orders"}
-          </h1>
-          <p class="text-gray-600">
-            {if @is_admin,
-              do: "View and manage all customer orders",
-              else: "View and manage your order history"}
+          <h1 class="text-3xl font-bold text-base-content mb-2"></h1>
+          <p class="text-base-content/70">
+            View and manage your order history
           </p>
         </div>
 
         <div :if={Enum.empty?(@streams.orders.inserts)} class="text-center py-12">
-          <div class="text-gray-500">
+          <div class="text-base-content/50">
             <svg
-              class="mx-auto h-24 w-24 text-gray-400"
+              class="mx-auto h-24 w-24 text-base-content/40"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -144,7 +119,7 @@ defmodule AshPayWeb.OrdersLive do
             <h3 class="mt-4 text-lg font-medium text-gray-900">No orders yet</h3>
             <p class="mt-2 text-sm text-gray-500">
               You haven't placed any orders yet.
-              <.link navigate={~p"/storefront"} class="text-blue-600 hover:text-blue-800">
+              <.link navigate={~p"/storefront"} class="text-primary hover:text-primary/80">
                 Browse products
               </.link>
               to get started.
@@ -154,20 +129,20 @@ defmodule AshPayWeb.OrdersLive do
 
         <div
           :if={not Enum.empty?(@streams.orders.inserts)}
-          class="bg-white rounded-lg shadow overflow-hidden"
+          class="bg-base-100 rounded-lg shadow overflow-hidden"
         >
           <.table id="orders" rows={@streams.orders}>
             <:col :let={{_id, order}} label="Order ID">
               <.link
                 navigate={~p"/orders/#{order.id}"}
-                class="font-mono text-sm text-blue-600 hover:text-blue-800 underline"
+                class="font-mono text-sm text-primary hover:text-primary/80 underline"
               >
                 {String.slice(order.id, 0, 8)}
               </.link>
             </:col>
             <:col :let={{_id, order}} label="Product">{order.product.name}</:col>
             <:col :let={{_id, order}} label="Amount">
-              <span class="font-semibold text-green-600">
+              <span class="font-semibold text-success">
                 {Money.to_string!(order.amount)}
               </span>
             </:col>
@@ -176,7 +151,7 @@ defmodule AshPayWeb.OrdersLive do
               <span class={"badge " <> badge_class}>{status_text}</span>
             </:col>
             <:col :let={{_id, order}} label="Date">
-              <time class="text-sm text-gray-500">
+              <time class="text-sm text-base-content/50">
                 {Calendar.strftime(order.inserted_at, "%B %d, %Y at %I:%M %p")}
               </time>
             </:col>
@@ -185,7 +160,6 @@ defmodule AshPayWeb.OrdersLive do
                 :if={AshPay.Commerce.can_refund_order?(@current_user, order)}
                 phx-click="refund"
                 phx-value-id={order.id}
-                phx-disable-with="Processing..."
               >
                 Refund
               </.button>
