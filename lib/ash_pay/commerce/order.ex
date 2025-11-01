@@ -114,6 +114,7 @@ defmodule AshPay.Commerce.Order do
     end
 
     policy action(:refund) do
+      forbid_unless AshStateMachine.Checks.ValidNextState
       authorize_if actor_attribute_equals(:role, :admin)
     end
 
