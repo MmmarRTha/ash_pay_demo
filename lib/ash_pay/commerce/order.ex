@@ -107,6 +107,7 @@ defmodule AshPay.Commerce.Order do
     end
 
     policy action_type(:create) do
+      forbid_if actor_attribute_equals(:role, :admin)
       authorize_if actor_present()
     end
   end
