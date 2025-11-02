@@ -1,4 +1,9 @@
 # AshPay
+<img width="1468" height="1416" alt="ash_pay_demo_desktop" src="https://github.com/user-attachments/assets/7afb71e2-8234-48bd-949c-331a49df0e21" />
+<img width="1468" height="786" alt="Screenshot_2025-11-02_at_00-28-22_AshPay_Phoenix_Framework_50" src="https://github.com/user-attachments/assets/2e6ffceb-6425-4c3f-af61-acf4ec89a58a" />
+<img width="1468" height="786" alt="Screenshot_2025-11-02_at_00-28-13_Orders_Phoenix_Framework_50" src="https://github.com/user-attachments/assets/a0257b22-f9f3-4ba5-92ff-c10c14a76b4a" />
+<img width="1468" height="957" alt="Screenshot_2025-11-02_at_00-28-01_Order_Details_Phoenix_Framework_50" src="https://github.com/user-attachments/assets/718b3e43-0882-4835-b92a-d6101b736528" />
+
 # Learning by Doing
 
 This is my personal implementation of the original MoneyPit project by Christian Alexander.
