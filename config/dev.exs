@@ -3,8 +3,8 @@ config :ash, policies: [show_policy_breakdowns?: true]
 
 # Configure your database
 config :ash_pay, AshPay.Repo,
-  username: "backend_elixir",
-  password: "postgres_p0p",
+  username: "backend_mn",
+  password: "fedoradb",
   hostname: "localhost",
   database: "ash_pay_dev",
   stacktrace: true,
